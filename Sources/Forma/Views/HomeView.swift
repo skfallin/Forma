@@ -14,7 +14,7 @@ struct HomeView: View {
                     .font(.system(size: 46, weight: .light))
                     .foregroundStyle(.secondary)
 
-                Text("Native Viewer")
+                Text("Forma")
                     .font(.largeTitle.weight(.semibold))
 
                 Text("Open files and web pages with native Apple viewers.")

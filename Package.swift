@@ -3,19 +3,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "NativeViewer",
+    name: "Forma",
     platforms: [
         .macOS(.v14)
     ],
     products: [
         .executable(
-            name: "NativeViewer",
-            targets: ["NativeViewer"]
+            name: "Forma",
+            targets: ["Forma"]
         )
     ],
     targets: [
         .executableTarget(
-            name: "NativeViewer"
+            name: "Forma"
         )
     ]
 )
