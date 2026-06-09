@@ -1,5 +1,7 @@
 # Forma
 
+![Forma banner](Assets/Marketing/FormaBanner.jpg)
+
 Forma is a minimal native macOS viewer for opening and reading different kinds of content through Apple frameworks.
 
 It is built with Swift and SwiftUI, with native viewers for common formats:
@@ -41,28 +43,6 @@ To verify the app starts:
 ```bash
 ./script/build_and_run.sh --verify
 ```
-
-## Package a DMG
-
-Create a release-ready DMG locally:
-
-```bash
-./script/package_dmg.sh
-```
-
-The script builds a release app bundle, applies an ad-hoc signature, creates a DMG with `Forma.app` and an `Applications` shortcut, verifies the image, and writes the final artifact to:
-
-```text
-outputs/Forma-0.1.0.dmg
-```
-
-Set a custom version with:
-
-```bash
-VERSION=0.2.0 ./script/package_dmg.sh
-```
-
-The generated DMG is suitable to upload manually to a GitHub Release. For production distribution outside GitHub, sign with a Developer ID certificate and notarize the DMG with Apple.
 
 ## Requirements
 
