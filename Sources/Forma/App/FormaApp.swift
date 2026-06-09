@@ -1,10 +1,50 @@
 import AppKit
 import SwiftUI
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var openFilesHandler: (([URL]) -> Void)?
+    private var pendingOpenFileURLs: [URL] = []
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func application(_ sender: NSApplication, openFiles filenames: [String]) {
+        let fileURLs = filenames.map { URL(fileURLWithPath: $0) }
+        open(fileURLs, sender: sender)
+    }
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        open(urls, sender: application)
+    }
+
+    private func open(_ fileURLs: [URL], sender: NSApplication) {
+        guard !fileURLs.isEmpty else {
+            sender.reply(toOpenOrPrint: .failure)
+            return
+        }
+
+        if let openFilesHandler {
+            openFilesHandler(fileURLs)
+        } else {
+            pendingOpenFileURLs.append(contentsOf: fileURLs)
+        }
+
+        sender.reply(toOpenOrPrint: .success)
+    }
+
+    func setOpenFilesHandler(_ handler: @escaping ([URL]) -> Void) {
+        openFilesHandler = handler
+
+        guard !pendingOpenFileURLs.isEmpty else {
+            return
+        }
+
+        let pendingURLs = pendingOpenFileURLs
+        pendingOpenFileURLs.removeAll()
+        handler(pendingURLs)
     }
 }
 
@@ -18,6 +58,14 @@ struct FormaApp: App {
             ContentView()
                 .environmentObject(appState)
                 .frame(minWidth: 900, minHeight: 620)
+                .onOpenURL { url in
+                    appState.openExternalURL(url)
+                }
+                .onAppear {
+                    appDelegate.setOpenFilesHandler { fileURLs in
+                        appState.openFiles(at: fileURLs)
+                    }
+                }
         }
         .windowStyle(.hiddenTitleBar)
         .commands {

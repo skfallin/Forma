@@ -29,6 +29,20 @@ final class AppState: ObservableObject {
         }
     }
 
+    func openFiles(at fileURLs: [URL]) {
+        for fileURL in fileURLs {
+            openFile(at: fileURL)
+        }
+    }
+
+    func openExternalURL(_ url: URL) {
+        if url.isFileURL {
+            openFile(at: url)
+        } else {
+            openURL(url.absoluteString)
+        }
+    }
+
     func openURL(_ value: String) {
         do {
             let item = try detector.item(forURLString: value)

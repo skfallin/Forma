@@ -16,12 +16,7 @@ struct TextViewer: View {
                 VStack(spacing: 0) {
                     searchSummary
 
-                    ScrollView {
-                        Text(attributedMarkdown)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .textSelection(.enabled)
-                            .padding(28)
-                    }
+                    MarkdownViewer(text: text)
                 }
             } else {
                 VStack(spacing: 0) {
@@ -40,10 +35,6 @@ struct TextViewer: View {
         .task(id: url) {
             loadText()
         }
-    }
-
-    private var attributedMarkdown: AttributedString {
-        (try? AttributedString(markdown: text)) ?? AttributedString(text)
     }
 
     @ViewBuilder

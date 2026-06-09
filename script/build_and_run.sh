@@ -3,7 +3,7 @@ set -euo pipefail
 
 MODE="${1:-run}"
 APP_NAME="Forma"
-APP_VERSION="0.1.1"
+APP_VERSION="0.1.2"
 BUNDLE_ID="dev.codex.Forma"
 MIN_SYSTEM_VERSION="14.0"
 
@@ -51,6 +51,33 @@ cat >"$INFO_PLIST" <<PLIST
   <string>$APP_VERSION</string>
   <key>CFBundleIconFile</key>
   <string>Forma</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>
+      <string>Forma Supported Documents</string>
+      <key>CFBundleTypeRole</key>
+      <string>Viewer</string>
+      <key>LSHandlerRank</key>
+      <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.content</string>
+        <string>public.data</string>
+        <string>public.text</string>
+        <string>public.plain-text</string>
+        <string>public.rtf</string>
+        <string>public.markdown</string>
+        <string>public.json</string>
+        <string>public.xml</string>
+        <string>public.yaml</string>
+        <string>public.comma-separated-values-text</string>
+        <string>public.tab-separated-values-text</string>
+        <string>public.image</string>
+        <string>com.adobe.pdf</string>
+      </array>
+    </dict>
+  </array>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>LSMinimumSystemVersion</key>
