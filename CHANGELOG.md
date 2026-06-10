@@ -1,5 +1,23 @@
 # Changelog
 
+## Forma 0.1.4
+
+### Highlights
+
+- Added one-click copy controls for Markdown fenced text blocks.
+- Kept copy controls scoped to the gray text block content instead of headings or metadata.
+- Added pressed feedback animation for the copy button.
+- Added a material button background and extra trailing scroll space so long lines remain readable.
+- Updated bundle metadata to version 0.1.4.
+
+### Download
+
+Download `Forma-0.1.4.dmg`, open it, and drag `Forma.app` into Applications.
+
+### Notes
+
+This build is ad-hoc signed and not notarized yet. macOS Gatekeeper may show a warning the first time you open it.
+
 ## Forma 0.1.3
 
 ### Highlights

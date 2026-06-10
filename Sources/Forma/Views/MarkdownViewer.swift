@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct MarkdownViewer: View {
@@ -24,6 +25,7 @@ struct MarkdownViewer: View {
 private struct MarkdownBlockView: View {
     let block: MarkdownBlock
     let zoomScale: Double
+    @State private var isCopyPressed = false
 
     var body: some View {
         switch block {
@@ -92,9 +94,28 @@ private struct MarkdownBlockView: View {
                         .font(.system(size: 13 * zoomScale, design: .monospaced))
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(12)
+                        .padding(.leading, 12)
+                        .padding(.vertical, 12)
+                        .padding(.trailing, 64)
                 }
                 .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .overlay(alignment: .topTrailing) {
+                    Button {
+                        copyToPasteboard(code)
+                        animateCopyPress()
+                    } label: {
+                        Image(systemName: "doc.on.doc")
+                            .padding(6)
+                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    }
+                    .buttonStyle(.borderless)
+                    .controlSize(.small)
+                    .help("Copy Block")
+                    .scaleEffect(isCopyPressed ? 0.92 : 1)
+                    .offset(y: isCopyPressed ? 3 : 0)
+                    .animation(.snappy(duration: 0.14), value: isCopyPressed)
+                    .padding(8)
+                }
             }
             .padding(.vertical, 3)
         case .divider:
@@ -130,6 +151,20 @@ private struct MarkdownBlockView: View {
 
     private func headingWeight(for level: Int) -> Font.Weight {
         level <= 4 ? .semibold : .bold
+    }
+
+    private func copyToPasteboard(_ text: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+    }
+
+    private func animateCopyPress() {
+        isCopyPressed = true
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(140))
+            isCopyPressed = false
+        }
     }
 }
 
@@ -180,6 +215,15 @@ private enum MarkdownBlock {
     case quote(String)
     case codeBlock(language: String?, code: String)
     case divider
+
+    var copyText: String? {
+        switch self {
+        case let .codeBlock(_, code):
+            code
+        case .heading, .paragraph, .unorderedList, .orderedList, .checklist, .quote, .divider:
+            nil
+        }
+    }
 }
 
 private struct MarkdownListItem: Identifiable {

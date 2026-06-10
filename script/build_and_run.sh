@@ -3,7 +3,7 @@ set -euo pipefail
 
 MODE="${1:-run}"
 APP_NAME="Forma"
-APP_VERSION="0.1.3"
+APP_VERSION="0.1.4"
 BUNDLE_ID="dev.codex.Forma"
 MIN_SYSTEM_VERSION="14.0"
 
